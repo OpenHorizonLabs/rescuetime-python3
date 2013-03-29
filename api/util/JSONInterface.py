@@ -7,18 +7,20 @@ except ImportError:
         from django.utils.simplejson import dumps as serialize
     except ImportError:
         try:
-            from json import read as deserialize
-            from json import write as serialize
-        except ImportError, e:
-            raise ImportError('Could not find a suitable json library: ' + unicode(e))
+            from json import loads as deserialize
+            from json import dumps as serialize
+        except ImportError as e:
+            raise ImportError('Could not find a suitable json library: ' + str(e))
 
 class JSONInterface(object):
+
     @classmethod
     def to_json(cls, data):
         return serialize(data)
+
     @classmethod
     def from_json(cls, json):
-        return deserialize(json)
+        return deserialize(json.decode('ascii'))
 
     @classmethod
     def for_response(cls, response = None, raw = False):
@@ -27,8 +29,8 @@ class JSONInterface(object):
         j._data = cls.from_json(j._json)
         if raw:
             j.object = j._data
-            return j 
-        
+            return j
+
         # our little envelope
         j.status = j._data['c']
         try:

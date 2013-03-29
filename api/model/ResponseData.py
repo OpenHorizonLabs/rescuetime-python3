@@ -1,4 +1,4 @@
-from rescuetime.api.util.Syncable import Syncable
+from api.util.Syncable import Syncable
 
 ## We try to use memcache for local cacheing
 try:
@@ -19,17 +19,17 @@ class ResponseData(Syncable):
     ## maps pretty names to short names to reduce GET size
     HTTP_PARAMS = { "operation"        : "op",
                     "version"          : "vn",
-                    "perspective"      : "pv", 
-                    "resolution_time"  : "rs", 
-                    "restrict_group"   : "rg", 
-                    "restrict_user"    : "ru", 
-                    "restrict_profile" : "rp", 
+                    "perspective"      : "pv",
+                    "resolution_time"  : "rs",
+                    "restrict_group"   : "rg",
+                    "restrict_user"    : "ru",
+                    "restrict_profile" : "rp",
                     "restrict_begin"   : "rb",
                     "restrict_end"     : "re",
-                    "restrict_project" : "rj", 
-                    "restrict_kind"    : "rk", 
-                    "restrict_thing"   : "rt", 
-                    "restrict_thingy"  : "ry", 
+                    "restrict_project" : "rj",
+                    "restrict_kind"    : "rk",
+                    "restrict_thing"   : "rt",
+                    "restrict_thingy"  : "ry",
                     "order_time"       : "ot",
                     "order_item_by"    : "ob",
                     "order_item"       : "oi" }
@@ -63,12 +63,11 @@ class ResponseData(Syncable):
                 self._parameters[self.HTTP_PARAMS[k]] = kws[k]
             except KeyError:
                 try:
-                    if self.HTTP_PARAMS[k]: 
+                    if self.HTTP_PARAMS[k]:
                         self._parameters[k] = kws[k]
                 except KeyError: # check if key is there else raise
                     if self.HTTP_PARAMS_R[k]:
                         self._parameters[self.HTTP_PARAMS_R[k]] = kws[k]
-                    
         return self
     param = params
     p = params
@@ -77,7 +76,7 @@ class ResponseData(Syncable):
 
     def cache_key(self):
         if self._cache_key == None:
-            akey = ["%s-%s" % (unicode(k), unicode(self._parameters[k])) for k in self._parameters]
+            akey = ["%s-%s" % (str(k), str(self._parameters[k])) for k in self._parameters]
             akey.append(self.key.key_name)
             self._cache_key = ",".join(akey)
         return self._cache_key

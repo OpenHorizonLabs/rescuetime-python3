@@ -1,5 +1,5 @@
 
-from rescuetime.api.util.Syncable import Syncable
+from api.util.Syncable import Syncable
 
 class AnalyticApiKey(Syncable):
     def __init__(self, key_name = None, service = None):
@@ -22,5 +22,5 @@ class AnalyticApiKey(Syncable):
 
     def sync_func(self,*args, **kws):
         self.attributes = self.service.fetch_key(self)
-        self.service.debug('attrs: ' + unicode(self.attributes))
+        self.service.debug('attrs: ' + str(self.attributes))
 

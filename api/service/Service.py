@@ -1,8 +1,7 @@
-import urllib2
-import urllib
+import urllib.request, urllib.parse, urllib.error
 import logging
 import sys
-from rescuetime.api.util.JSONInterface import JSONInterface
+from api.util.JSONInterface import JSONInterface
 
 class Service(object):
     """The Service class provides an object that mediates access to the RescueTime Data API.
@@ -29,12 +28,12 @@ and has the 'rescuetime.api' as its namespace.
 
     def hello(self):
         """This function tests connectivity to the service."""
-        response = urllib2.urlopen("/".join([self.server_loc, self._hello]))
+        response = urllib.request.urlopen("/".join([self.server_loc, self._hello]))
         return response.read()
-        
+
     def fetch_key(self, key = None):
         """Tests if key is valid."""
-        response = urllib2.urlopen(self.to_path(self._has_key), urllib.urlencode({ 'rtapi_key' : key.key_name }))
+        response = urllib.request.urlopen(self.to_path(self._has_key), urllib.parse.urlencode({ 'rtapi_key' : key.key_name }).encode('ascii'))
         return JSONInterface.for_response(response.read()).object
 
     def fetch_data(self, key = None, parameters = None):
@@ -43,10 +42,10 @@ and has the 'rescuetime.api' as its namespace.
         params['rtapi_key'] = key.key_name
         params['via'] = 'pyrt'
         params['format'] = 'json'
-        response = urllib2.urlopen(self.to_path(self._data), urllib.urlencode(params))
-        
+        response = urllib.request.urlopen(self.to_path(self._data), urllib.parse.urlencode(params).encode('ascii'))
+
         return JSONInterface.for_response(response.read(), True).object
-        
+
 
     def debug(self, *args):
         return self.logger.debug(*args)
